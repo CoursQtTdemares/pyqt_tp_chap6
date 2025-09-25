@@ -24,6 +24,8 @@ class WeatherMainWindow(QMainWindow):
     def setup_thread_pool(self) -> None:
         self.thread_pool = QThreadPool()
         self.active_workers: set[int] = set()
+        # Stockage des données météo reçues
+        self.weather_data: dict[str, float] = {}  # city -> temperature
 
     def setup_ui(self) -> None:
         main_layout = QVBoxLayout()
@@ -42,6 +44,9 @@ class WeatherMainWindow(QMainWindow):
         main_layout.addWidget(self.chart_widget)
 
     def fetch(self) -> None:
+        # Réinitialiser les données
+        self.weather_data.clear()
+
         for worker_id, city in enumerate(DEFAULT_CITIES_REQUESTED, start=1):
             worker = WeatherWorker(worker_id, city)
 
@@ -56,8 +61,24 @@ class WeatherMainWindow(QMainWindow):
         print(f"{worker_id} succeeded")
         self.display_data_area.append(f"{data['city']}: {data['temperature']}°C, {data['humidity']}%")
 
+        # Stocker les données reçues
+        self.weather_data[data["city"]] = data["temperature"]
+
     def on_error_occurred(self, worker_id: int, error_message: str) -> None:
         self.display_data_area.append(f"Error occurred from worker {worker_id}: {error_message}")
 
     def on_finished(self, worker_id: int) -> None:
         self.active_workers.discard(worker_id)
+
+        if len(self.active_workers) == 0:
+            self.update_chart_with_data()
+
+    def update_chart_with_data(self) -> None:
+        """Met à jour le graphique avec les données météo reçues (max 3 villes)"""
+        if not self.weather_data:
+            return
+
+        cities = list(self.weather_data)[:3]
+        temperatures = list(self.weather_data.values())[:3]
+
+        self.chart_widget.update_chart(cities, temperatures)

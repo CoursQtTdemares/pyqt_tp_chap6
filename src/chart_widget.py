@@ -20,6 +20,12 @@ class ChartWidget(QWidget):
     def sizeHint(self) -> QSize:
         return QSize(400, 300)
 
+    def update_chart(self, cities: list[str], temperatures: list[float]) -> None:
+        """Met à jour les données du graphique et redessine"""
+        self.cities = cities
+        self.temperatures = temperatures
+        self.update()  # Déclenche un repaint
+
     @override
     def paintEvent(self, event: QPaintEvent | None = None) -> None:
         painter = QPainter(self)
