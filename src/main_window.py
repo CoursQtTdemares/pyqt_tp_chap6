@@ -2,6 +2,7 @@ from PyQt6.QtCore import QThreadPool
 from PyQt6.QtWidgets import QMainWindow, QPushButton, QTextEdit, QVBoxLayout, QWidget
 
 from src.api import WeatherResponse
+from src.chart_widget import DEFAULT_CITIES, DEFAULT_TEMPERATURES, ChartWidget
 from src.weather_worker import WeatherWorker
 
 DEFAULT_CITIES_REQUESTED = ["Paris", "London", "New York", "Tokyo", "Sydney"]
@@ -34,8 +35,11 @@ class WeatherMainWindow(QMainWindow):
         self.display_data_area = QTextEdit()
         self.display_data_area.setReadOnly(True)
 
+        self.chart_widget = ChartWidget(DEFAULT_CITIES, DEFAULT_TEMPERATURES)
+
         main_layout.addWidget(fetch_data_button)
         main_layout.addWidget(self.display_data_area)
+        main_layout.addWidget(self.chart_widget)
 
     def fetch(self) -> None:
         for worker_id, city in enumerate(DEFAULT_CITIES_REQUESTED, start=1):
