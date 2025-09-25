@@ -1,0 +1,10 @@
+{
+    "recommendations": [
+        "charliermarsh.ruff",
+        "ms-python.mypy-type-checker",
+        "mhutchie.git-graph",
+        "tamasfe.even-better-toml",
+        "goopware.raythis",
+        "ms-python.python"
+    ]
+}
