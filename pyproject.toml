@@ -4,7 +4,9 @@ version = "0.1.0"
 description = "pyqt_tp_chap6 description."
 readme = "README.md"
 requires-python = ">=3.13"
-dependencies = []
+dependencies = [
+    "pyqt6>=6.9.1",
+]
 
 [dependency-groups]
 dev = [
@@ -83,7 +85,7 @@ select = [
     "PERF",
 
 ]
-ignore = ["N818", "PTH123", "TRY003"]
+ignore = ["N818", "PTH123", "TRY003", "T201"]
 
 fixable = ["ALL"]
 unfixable = []
